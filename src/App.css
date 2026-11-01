@@ -52,3 +52,52 @@ nav a {
   padding: 60px 8%;
   text-align: center;
 }
+
+.cocktail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.cocktail-card {
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.cocktail-card:hover {
+  transform: translateY(-5px);
+}
+
+.cocktail-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.cocktail-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.cocktail-info h3 {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.cocktail-info p {
+  color: #e8b86d;
+  font-size: 14px;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .cocktail-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+  }
+}

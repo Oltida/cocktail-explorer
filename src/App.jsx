@@ -60,11 +60,20 @@ function App() {
           ) : drinks.length === 0 ? (
             <p>No cocktails found.</p>
           ) : (
-            <div>
-              {drinks.map((drink) => (
-                <p key={drink.idDrink}>{drink.strDrink}</p>
-              ))}
-            </div>
+            <div className="cocktail-grid">
+             {drinks.map((drink) => (
+              <div className="cocktail-card" key={drink.idDrink}>
+               <img
+                 src={drink.strDrinkThumb}
+                 alt={drink.strDrink}
+               />
+               <div className="cocktail-info">
+                <h3>{drink.strDrink}</h3>
+                <p>{drink.strCategory}</p>
+               </div>
+              </div>
+            ))}
+          </div>
           )}
         </section>
       </main>
