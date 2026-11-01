@@ -1,7 +1,35 @@
 
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
+  const [drinks, setDrinks] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    async function fetchCocktails() {
+      try {
+        const response = await fetch(
+          'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a'
+        )
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch cocktails')
+        }
+
+        const data = await response.json()
+        setDrinks(data.drinks || [])
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCocktails()
+  }, [])
+
   return (
     <div className="app">
       <header className="navbar">
@@ -24,7 +52,20 @@ function App() {
 
         <section className="explore" id="explore">
           <h2>Explore Cocktails</h2>
-          <p>Your cocktail collection will appear here soon!</p>
+
+          {loading ? (
+            <p>Loading cocktails...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : drinks.length === 0 ? (
+            <p>No cocktails found.</p>
+          ) : (
+            <div>
+              {drinks.map((drink) => (
+                <p key={drink.idDrink}>{drink.strDrink}</p>
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>
