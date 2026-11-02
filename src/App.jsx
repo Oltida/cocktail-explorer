@@ -8,6 +8,7 @@ function App() {
   const [error, setError] = useState(null)
   const [searchInput, setSearchInput] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [filter, setFilter] = useState('all')
 
   useEffect(() => {
     const controller = new AbortController()
@@ -54,6 +55,13 @@ function App() {
     event.preventDefault()
     setSearchTerm(searchInput.trim())
   }
+  const filteredDrinks = drinks.filter((drink) => {
+  if (filter === 'all') {
+    return true
+  }
+
+  return drink.strAlcoholic === filter
+  })
 
   return (
     <div className="app">
@@ -88,6 +96,34 @@ function App() {
             />
             <button type="submit">Search</button>
           </form>
+          <div className="filter-buttons">
+           <button
+            type="button"
+            className={filter === 'all' ? 'active' : ''}
+            onClick={() => setFilter('all')}
+            aria-pressed={filter === 'all'}
+           >
+            All Drinks
+           </button>
+
+           <button
+            type="button"
+            className={filter === 'Alcoholic' ? 'active' : ''}
+            onClick={() => setFilter('Alcoholic')}
+            aria-pressed={filter === 'Alcoholic'}
+           >
+            Alcoholic
+           </button>
+
+           <button
+            type="button"
+            className={filter === 'Non alcoholic' ? 'active' : ''}
+            onClick={() => setFilter('Non alcoholic')}
+            aria-pressed={filter === 'Non alcoholic'}
+           >
+            Non-Alcoholic
+           </button>
+          </div>
 
           {loading ? (
             <p>Loading cocktails...</p>
@@ -95,9 +131,11 @@ function App() {
             <p>{error}</p>
           ) : drinks.length === 0 ? (
             <p>No cocktails found.</p>
-          ) : (
-            <div className="cocktail-grid">
-              {drinks.map((drink) => (
+            ) : filteredDrinks.length === 0 ? (
+              <p>No cocktails match this filter.</p>
+            ) : (
+              <div className="cocktail-grid">
+              {filteredDrinks.map((drink) => (
                 <div className="cocktail-card" key={drink.idDrink}>
                   <img
                     src={drink.strDrinkThumb}
