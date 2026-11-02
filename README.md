@@ -18,7 +18,7 @@ React, Vite, JavaScript, CSS, and TheCocktailDB API.
 3. Open the localhost link
 
 ## Live Website
-Coming soon (Netlify).
+https://cocktail-explorer1.netlify.app
 
 ## Error Testing
 Click "Test Error" to simulate a failed API request and "Restore API" to reload the cocktails.
