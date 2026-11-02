@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import useFetch from './hooks/useFetch'
 import './App.css'
 
@@ -9,16 +9,35 @@ function App() {
   const [filter, setFilter] = useState('all')
   const [testError, setTestError] = useState(false)
 
-  // Use a broken URL when testing the error state
-  const url = testError
-    ? 'https://cocktail-api.invalid/drinks'
-    : searchTerm
-      ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`
-      : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a'
+  const requestUrls = useMemo(() => {
+    const baseUrl =
+      'https://www.thecocktaildb.com/api/json/v1/1/'
 
-  const { data, loading, error, retry } = useFetch(url)
+    if (testError) {
+      return ['https://cocktail-api.invalid/drinks']
+    }
 
-  const drinks = data?.drinks || []
+    if (searchTerm) {
+      return [
+        `${baseUrl}search.php?s=${encodeURIComponent(searchTerm)}`
+      ]
+    }
+
+    return ['c', 'm', 's'].map(
+      (letter) => `${baseUrl}search.php?f=${letter}`
+    )
+  }, [searchTerm, testError])
+
+  const { data, loading, error, retry } = useFetch(requestUrls)
+
+  // Display 8 drinks from each letter on the homepage
+  const drinks = data
+    ? searchTerm
+      ? data[0]?.drinks || []
+      : data.flatMap((result) =>
+          (result.drinks || []).slice(0, 8)
+        )
+    : []
 
   function handleSearch(event) {
     event.preventDefault()
@@ -37,6 +56,7 @@ function App() {
     <div className="app">
       <header className="navbar">
         <h2>Cocktail Explorer 🍸</h2>
+
         <nav>
           <a href="#home">Home</a>
           <a href="#explore">Explore</a>
@@ -45,8 +65,12 @@ function App() {
 
       <main>
         <section className="hero" id="home">
-          <p className="subtitle">YOUR NEXT FAVORITE DRINK</p>
+          <p className="subtitle">
+            YOUR NEXT FAVORITE DRINK
+          </p>
+
           <h1>Discover Your Perfect Cocktail</h1>
+
           <p>
             Explore delicious cocktails, discover new flavors,
             and find the perfect recipe for any occasion.
@@ -57,15 +81,23 @@ function App() {
           <h2>Explore Cocktails</h2>
 
           {/* SEARCH BAR */}
-          <form className="search-form" onSubmit={handleSearch}>
+          <form
+            className="search-form"
+            onSubmit={handleSearch}
+          >
             <input
               type="search"
               placeholder="Search cocktails..."
               value={searchInput}
-              onChange={(event) => setSearchInput(event.target.value)}
+              onChange={(event) =>
+                setSearchInput(event.target.value)
+              }
               aria-label="Search cocktails by name"
             />
-            <button type="submit">Search</button>
+
+            <button type="submit">
+              Search
+            </button>
           </form>
 
           {/* FILTER BUTTONS */}
@@ -81,7 +113,9 @@ function App() {
 
             <button
               type="button"
-              className={filter === 'Alcoholic' ? 'active' : ''}
+              className={
+                filter === 'Alcoholic' ? 'active' : ''
+              }
               onClick={() => setFilter('Alcoholic')}
               aria-pressed={filter === 'Alcoholic'}
             >
@@ -90,7 +124,9 @@ function App() {
 
             <button
               type="button"
-              className={filter === 'Non alcoholic' ? 'active' : ''}
+              className={
+                filter === 'Non alcoholic' ? 'active' : ''
+              }
               onClick={() => setFilter('Non alcoholic')}
               aria-pressed={filter === 'Non alcoholic'}
             >
@@ -98,36 +134,48 @@ function App() {
             </button>
           </div>
 
-          {/* ERROR TEST BUTTON */}
+          {/* TEST ERROR BUTTON */}
           <div className="test-error-controls">
             <button
               type="button"
-              className={`test-error-button ${testError ? 'active' : ''}`}
-              onClick={() => setTestError((previous) => !previous)}
+              className={`test-error-button ${
+                testError ? 'active' : ''
+              }`}
+              onClick={() =>
+                setTestError((previous) => !previous)
+              }
               aria-pressed={testError}
             >
               {testError ? 'Restore API' : 'Test Error'}
             </button>
 
             {testError && (
-              <p>Test mode is active. The API request will fail.</p>
+              <p>
+                Test mode is active. The API request will fail.
+              </p>
             )}
           </div>
 
-          {/* LOADING, ERROR, AND DATA STATES */}
+          {/* LOADING, ERROR, DATA STATES */}
           {loading ? (
             <div className="loading-state" role="status">
               <div
                 className="loading-spinner"
                 aria-hidden="true"
               ></div>
+
               <p>Mixing your cocktails...</p>
             </div>
           ) : error ? (
             <div className="error-state" role="alert">
               <h3>Oops! Something went wrong.</h3>
+
               <p>{error}</p>
-              <button type="button" onClick={retry}>
+
+              <button
+                type="button"
+                onClick={retry}
+              >
                 Try Again
               </button>
             </div>

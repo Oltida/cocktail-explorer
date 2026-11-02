@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react'
 
-function useFetch(url) {
+function useFetch(urls) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -13,20 +13,25 @@ function useFetch(url) {
     async function fetchData() {
       setLoading(true)
       setError(null)
+      setData(null)
 
       try {
-        const response = await fetch(url, {
-          signal: controller.signal
-        })
+        const results = await Promise.all(
+          urls.map(async (url) => {
+            const response = await fetch(url, {
+              signal: controller.signal
+            })
 
-        if (!response.ok) {
-          throw new Error('Failed to load cocktails.')
-        }
+            if (!response.ok) {
+              throw new Error('Failed to load cocktails')
+            }
 
-        const result = await response.json()
+            return response.json()
+          })
+        )
 
         if (!controller.signal.aborted) {
-          setData(result)
+          setData(results)
         }
       } catch (err) {
         if (!controller.signal.aborted) {
@@ -44,7 +49,7 @@ function useFetch(url) {
     fetchData()
 
     return () => controller.abort()
-  }, [url, retryCount])
+  }, [urls, retryCount])
 
   function retry() {
     setRetryCount((previous) => previous + 1)

@@ -1,4 +1,3 @@
-
 * {
   box-sizing: border-box;
 }
@@ -10,9 +9,11 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background: #0f0f0f;
 }
 
-button, input {
+button,
+input {
   font: inherit;
 }
