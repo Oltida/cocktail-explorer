@@ -310,3 +310,38 @@ nav a:hover {
 .error-state button:hover {
   background: #f5ca85;
 }
+
+
+/* ERROR TEST CONTROLS */
+
+.test-error-controls {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.test-error-button {
+  padding: 10px 22px;
+  background: transparent;
+  color: #e8b86d;
+  border: 1px solid #e8b86d;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.test-error-button:hover {
+  background: #e8b86d;
+  color: #141414;
+}
+
+.test-error-button.active {
+  background: #e8b86d;
+  color: #141414;
+}
+
+.test-error-controls p {
+  color: #ccc;
+  font-size: 14px;
+  margin-top: 12px;
+}

@@ -7,10 +7,14 @@ function App() {
   const [searchInput, setSearchInput] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filter, setFilter] = useState('all')
+  const [testError, setTestError] = useState(false)
 
-  const url = searchTerm
-    ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`
-    : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a'
+  // Use a broken URL when testing the error state
+  const url = testError
+    ? 'https://cocktail-api.invalid/drinks'
+    : searchTerm
+      ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`
+      : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a'
 
   const { data, loading, error, retry } = useFetch(url)
 
@@ -92,6 +96,22 @@ function App() {
             >
               Non-Alcoholic
             </button>
+          </div>
+
+          {/* ERROR TEST BUTTON */}
+          <div className="test-error-controls">
+            <button
+              type="button"
+              className={`test-error-button ${testError ? 'active' : ''}`}
+              onClick={() => setTestError((previous) => !previous)}
+              aria-pressed={testError}
+            >
+              {testError ? 'Restore API' : 'Test Error'}
+            </button>
+
+            {testError && (
+              <p>Test mode is active. The API request will fail.</p>
+            )}
           </div>
 
           {/* LOADING, ERROR, AND DATA STATES */}
