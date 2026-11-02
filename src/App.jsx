@@ -1,5 +1,5 @@
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useFetch from './hooks/useFetch'
 import './App.css'
 
@@ -9,6 +9,16 @@ function App() {
   const [filter, setFilter] = useState('all')
   const [testError, setTestError] = useState(false)
 
+  // LIVE SEARCH WITH DEBOUNCING
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchTerm(searchInput.trim())
+    }, 450)
+
+    return () => clearTimeout(timer)
+  }, [searchInput])
+
+  // API URLS
   const requestUrls = useMemo(() => {
     const baseUrl =
       'https://www.thecocktaildb.com/api/json/v1/1/'
@@ -23,6 +33,7 @@ function App() {
       ]
     }
 
+    // Default cocktails from different letters
     return ['c', 'm', 's'].map(
       (letter) => `${baseUrl}search.php?f=${letter}`
     )
@@ -30,7 +41,7 @@ function App() {
 
   const { data, loading, error, retry } = useFetch(requestUrls)
 
-  // Display 8 drinks from each letter on the homepage
+  // DISPLAY COCKTAILS
   const drinks = data
     ? searchTerm
       ? data[0]?.drinks || []
@@ -39,11 +50,13 @@ function App() {
         )
     : []
 
+  // SEARCH BUTTON
   function handleSearch(event) {
     event.preventDefault()
     setSearchTerm(searchInput.trim())
   }
 
+  // FILTER COCKTAILS
   const filteredDrinks = drinks.filter((drink) => {
     if (filter === 'all') {
       return true
@@ -54,6 +67,8 @@ function App() {
 
   return (
     <div className="app">
+
+      {/* NAVBAR */}
       <header className="navbar">
         <h2>Cocktail Explorer 🍸</h2>
 
@@ -64,6 +79,8 @@ function App() {
       </header>
 
       <main>
+
+        {/* HERO SECTION */}
         <section className="hero" id="home">
           <p className="subtitle">
             YOUR NEXT FAVORITE DRINK
@@ -77,6 +94,7 @@ function App() {
           </p>
         </section>
 
+        {/* EXPLORE SECTION */}
         <section className="explore" id="explore">
           <h2>Explore Cocktails</h2>
 
@@ -102,6 +120,7 @@ function App() {
 
           {/* FILTER BUTTONS */}
           <div className="filter-buttons">
+
             <button
               type="button"
               className={filter === 'all' ? 'active' : ''}
@@ -132,6 +151,7 @@ function App() {
             >
               Non-Alcoholic
             </button>
+
           </div>
 
           {/* TEST ERROR BUTTON */}
@@ -156,7 +176,7 @@ function App() {
             )}
           </div>
 
-          {/* LOADING, ERROR, DATA STATES */}
+          {/* LOADING, ERROR, AND DATA STATES */}
           {loading ? (
             <div className="loading-state" role="status">
               <div

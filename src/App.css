@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Manrope:wght@400;500;600;700&display=swap');
 
 .app {
   min-height: 100vh;
@@ -393,5 +393,66 @@ nav a:hover {
 @media (prefers-reduced-motion: reduce) {
   .loading-spinner {
     animation: none;
+  }
+}
+
+
+/* ELEGANT TYPOGRAPHY */
+
+.app {
+  font-family: 'Manrope', sans-serif;
+}
+
+.navbar h2 {
+  font-family: 'Italiana', serif;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+.hero h1 {
+  font-family: 'Italiana', serif;
+  font-size: clamp(54px, 7vw, 94px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+}
+
+.explore h2 {
+  font-family: 'Italiana', serif;
+  font-size: 48px;
+  font-weight: 400;
+}
+
+.cocktail-info h3 {
+  font-family: 'Italiana', serif;
+  font-size: 29px;
+  font-weight: 400;
+}
+
+.error-state h3 {
+  font-family: 'Italiana', serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.subtitle {
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .navbar h2 {
+    font-size: 26px;
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 11vw, 64px);
+  }
+
+  .explore h2 {
+    font-size: 40px;
   }
 }
