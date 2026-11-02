@@ -93,7 +93,10 @@ function App() {
           </div>
 
           {loading ? (
-            <p>Loading cocktails...</p>
+           <div className="loading-state" role="status">
+             <div className="loading-spinner" aria-hidden="true"></div>
+             <p>Mixing your cocktails...</p>
+           </div>
           ) : error ? (
             <p>{error}</p>
           ) : drinks.length === 0 ? (
