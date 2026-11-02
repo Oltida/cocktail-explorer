@@ -12,7 +12,7 @@ function App() {
     ? `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`
     : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a'
 
-  const { data, loading, error } = useFetch(url)
+  const { data, loading, error, retry } = useFetch(url)
 
   const drinks = data?.drinks || []
 
@@ -52,6 +52,7 @@ function App() {
         <section className="explore" id="explore">
           <h2>Explore Cocktails</h2>
 
+          {/* SEARCH BAR */}
           <form className="search-form" onSubmit={handleSearch}>
             <input
               type="search"
@@ -63,6 +64,7 @@ function App() {
             <button type="submit">Search</button>
           </form>
 
+          {/* FILTER BUTTONS */}
           <div className="filter-buttons">
             <button
               type="button"
@@ -92,13 +94,23 @@ function App() {
             </button>
           </div>
 
+          {/* LOADING, ERROR, AND DATA STATES */}
           {loading ? (
-           <div className="loading-state" role="status">
-             <div className="loading-spinner" aria-hidden="true"></div>
-             <p>Mixing your cocktails...</p>
-           </div>
+            <div className="loading-state" role="status">
+              <div
+                className="loading-spinner"
+                aria-hidden="true"
+              ></div>
+              <p>Mixing your cocktails...</p>
+            </div>
           ) : error ? (
-            <p>{error}</p>
+            <div className="error-state" role="alert">
+              <h3>Oops! Something went wrong.</h3>
+              <p>{error}</p>
+              <button type="button" onClick={retry}>
+                Try Again
+              </button>
+            </div>
           ) : drinks.length === 0 ? (
             <p>No cocktails found.</p>
           ) : filteredDrinks.length === 0 ? (
@@ -106,11 +118,15 @@ function App() {
           ) : (
             <div className="cocktail-grid">
               {filteredDrinks.map((drink) => (
-                <div className="cocktail-card" key={drink.idDrink}>
+                <div
+                  className="cocktail-card"
+                  key={drink.idDrink}
+                >
                   <img
                     src={drink.strDrinkThumb}
                     alt={drink.strDrink}
                   />
+
                   <div className="cocktail-info">
                     <h3>{drink.strDrink}</h3>
                     <p>{drink.strCategory}</p>

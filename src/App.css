@@ -270,3 +270,43 @@ nav a:hover {
     animation: none;
   }
 }
+
+
+/* ERROR STATE */
+
+.error-state {
+  text-align: center;
+  padding: 50px 20px;
+  background: #222;
+  border: 1px solid #5c3838;
+  border-radius: 12px;
+  max-width: 550px;
+  margin: 30px auto;
+}
+
+.error-state h3 {
+  color: #e8b86d;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.error-state p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.error-state button {
+  background: #e8b86d;
+  color: #141414;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.error-state button:hover {
+  background: #f5ca85;
+}

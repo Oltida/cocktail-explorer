@@ -5,6 +5,7 @@ function useFetch(url) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -19,7 +20,7 @@ function useFetch(url) {
         })
 
         if (!response.ok) {
-          throw new Error('Failed to fetch data')
+          throw new Error('Failed to load cocktails.')
         }
 
         const result = await response.json()
@@ -29,7 +30,9 @@ function useFetch(url) {
         }
       } catch (err) {
         if (!controller.signal.aborted) {
-          setError(err.message)
+          setError(
+            'Could not load cocktails. Please check your connection and try again.'
+          )
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -41,9 +44,13 @@ function useFetch(url) {
     fetchData()
 
     return () => controller.abort()
-  }, [url])
+  }, [url, retryCount])
 
-  return { data, loading, error }
+  function retry() {
+    setRetryCount((previous) => previous + 1)
+  }
+
+  return { data, loading, error, retry }
 }
 
 export default useFetch
